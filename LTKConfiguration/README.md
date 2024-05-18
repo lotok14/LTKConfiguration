@@ -1,2 +1,0 @@
-# LTK Configuration
-# later
