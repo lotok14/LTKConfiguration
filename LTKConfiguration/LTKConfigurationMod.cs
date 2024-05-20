@@ -7,10 +7,12 @@ using static UnityEngine.ParticleSystem.PlaybackState;
 using LTKConfiguration.Patches;
 using System.Reflection;
 using BepInEx.Logging;
+using UnityEngine;
 
 namespace LTKConfiguration
 {
-    [BepInPlugin("LTK.uch.LTKConfiguration", "LTK Configuration", "1.0.0")]
+    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInDependency("LTKLib")]
     public class LTKConfigurationMod : BaseUnityPlugin
     {
         internal static ManualLogSource Log;
@@ -24,6 +26,10 @@ namespace LTKConfiguration
         public static ConfigEntry<float> JetpackFuelAmount;
         public static ConfigEntry<bool> BeehivePointsEnabled;
         public static ConfigEntry<float> BeehivePointsAmount;
+        public static ConfigEntry<bool> BeehivePointsAlwaysAward;
+        public static ConfigEntry<bool> ShowPuckBar;
+
+        public static int beesCustomPointId;
 
         private void Awake()
         {
@@ -38,22 +44,25 @@ namespace LTKConfiguration
             JetpackUseFuel = Config.Bind("Jetpack", "Use fuel", false, "Whether the jetpack can run out of fuel (true/false)");
             JetpackFuelAmount = Config.Bind("Jetpack", "Fuel Amount", 1f, "How long in seconds can you use the jetpack before it runs out (only works with Use fuel = true)");
             BeehivePointsEnabled = Config.Bind("Beehive", "Beehive Points Enabled", false, "Whether finishing with a beehive grants points (true/false)");
-            BeehivePointsAmount = Config.Bind("Beehive", "Beehive Points Amount", 0.6f, "How many points finishing with a beehive grants in relation to coins (only works with Beehive Points Enabled = true)");
+            BeehivePointsAmount = Config.Bind("Beehive", "Beehive Points Amount", 0.4f, "How many points finishing with a beehive grants (only works with Beehive Points Enabled = true)");
+            BeehivePointsAlwaysAward = Config.Bind("Beehive", "Beehive Points Always Award", true, "Whether you always get points for finishing with a beehive (only works with Beehive Points Enabled = true)");
+            ShowPuckBar = Config.Bind("Hockey", "Show Hockey Indicator", false, "Adds an icon showing when a hockey shooter is about to shoot (true/false)");
 
             // Plugin startup logic
-            Log.LogInfo("Plugin LTK.uch.LTKConfiguration is loaded!");
+            Log.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
             // load assets
             JetpackPatch.LoadFuelBarPrefab();
+            HockeyPatch.LoadPuckBarPrefab();
 
             // patch with harmony
             startPatching();
-            Log.LogInfo("LTK.uch.LTKConfiguration finished patching");
+            Log.LogInfo($"{PluginInfo.PLUGIN_GUID} finished patching");
         }
 
         private void startPatching()
         {
-            var harmony = new Harmony("LTK.uch.LTKConfiguration");
+            var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
             MethodInfo original;
             MethodInfo patch;
 
@@ -150,29 +159,43 @@ namespace LTKConfiguration
                 // =====================================<Beehive Patch>=====================================
                 if (LTKConfigurationMod.BeehivePointsEnabled.Value)
                 {
+                    LTKConfigurationMod.beesCustomPointId = LTKLib.LTKLibMod.CreateCustomPoint("Bees", LTKConfigurationMod.BeehivePointsAmount.Value, new Color(1, 1, 0), LTKConfigurationMod.BeehivePointsAlwaysAward.Value);
                     // (BeehivePatch) Beehive.FixedUpdate() Prefix
                     // Adds a point when beeswarm target finishes
                     original = AccessTools.Method(typeof(Beehive), "FixedUpdate");
                     patch = AccessTools.Method(typeof(BeehivePatch), "BeehiveFixedUpdatePrefix");
                     patchMethod(harmony, original, patch, "prefix");
-
-                    // (BeehivePatch) GraphScoreBoard.GetPreinstantiatedPointBlock() Postfix
-                    // Adds a point when beeswarm target finishes
-                    original = AccessTools.Method(typeof(GraphScoreBoard), "GetPreinstantiatedPointBlock");
-                    patch = AccessTools.Method(typeof(BeehivePatch), "GraphScoreBoardGetPreinstantiatedPointBlockPostfix");
-                    patchMethod(harmony, original, patch, "postfix");
                 }
                 else
                 {
                     Log.LogWarning("(BeehivePatch) Beehive.FixedUpdate() Prefix not patched because it was disabled in the config");
-                    Log.LogWarning("(BeehivePatch) GraphScoreBoard.GetPreinstantiatedPointBlock() Postfix not patched because it was disabled in the config");
                 }
                 // =====================================</Beehive Patch>=====================================
+
+                // =====================================<Hockey Patch>=======================================
+                if (LTKConfigurationMod.ShowPuckBar.Value)
+                {
+                    // (HockeyPatch) HockeyShooter.Update() Postfix
+                    // sets the fill of the puckbar to the time until next shot
+                    original = AccessTools.Method(typeof(HockeyShooter), "warningSound");
+                    patch = AccessTools.Method(typeof(HockeyPatch), "HockeyShooterWarningSoundPostfix");
+                    patchMethod(harmony, original, patch, "postfix");
+                }
+                else
+                {
+                    Log.LogWarning("(HockeyPatch) HockeyShooter.Update() Postfix not patched because it was disabled in the config");
+                }
+                // =====================================</Hockey Patch>=======================================
             }
             catch (Exception e)
             {
                 Log.LogError($"stopped patching because of error:\n{e}");
             }
+        }
+
+        void Update()
+        {
+            HockeyPatch.Update();
         }
 
         // patch a method with a specified patch

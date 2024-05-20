@@ -1,13 +1,12 @@
 using HarmonyLib;
 using BepInEx;
 using UnityEngine;
-using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using LTKConfiguration.Utils;
-using System;
 using LTKConfiguration.Extensions;
 using System.Reflection.Emit;
 using System.Linq;
+using LTKLib;
 
 namespace LTKConfiguration.Patches
 {
@@ -40,14 +39,31 @@ namespace LTKConfiguration.Patches
         {
             bool pickedUpJetpack = (bool)AccessTools.Field(typeof(Character), "pickedUpJetpack").GetValue(__instance);
             bool jump = (bool)AccessTools.Field(typeof(Character), "jump").GetValue(__instance);
-            if (pickedUpJetpack & jump)
+            bool finishing = (bool)AccessTools.Field(typeof(Character), "succeeding").GetValue(__instance);
+            if (pickedUpJetpack)
             {
-                float fuelLeftPercentage = __instance.GetAdditionalData().jetpackFuelBar.useFuel(Time.fixedDeltaTime);
+                if (finishing)
+                {
+                    __instance.GetAdditionalData().jetpackFuelBar.setFuel(0);
+                    Debug.Log("finished with jetpack");
+                }
+                else if(jump)
+                {
+                    __instance.GetAdditionalData().jetpackFuelBar.useFuel(Time.fixedDeltaTime);
+                    
+                }
+
+                float fuelLeftPercentage = __instance.GetAdditionalData().jetpackFuelBar.fuelLeftPercentage();
                 if (fuelLeftPercentage <= 0)
                 {
                     __instance.SetJetpackPickedUp(false);
-                    Debug.Log("jetpack fuel ran out");
+                    Debug.Log($"jetpack fuel ran out for player {__instance.networkNumber}");
                 }
+            }
+            else if(__instance.GetAdditionalData().jetpackFuelBar.fuelLeftPercentage() > 0)
+            {
+                __instance.GetAdditionalData().jetpackFuelBar.setFuel(0);
+                Debug.Log($"Jetpack fuel bar removed for player {__instance.networkNumber}");
             }
         }
 

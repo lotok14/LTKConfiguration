@@ -1,6 +1,3 @@
-using UnityEngine;
-using UnityEngine.Assertions;
-
 namespace LTKConfiguration.Patches
 {
     public class CollapsingBlockPatch

@@ -43,6 +43,15 @@ namespace LTKConfiguration.Utils
             return this.fuelLeft / this.maxFuelAmount * 100;
         }
 
+        public void setFuel(float setAmount)
+        {
+            this.fuelLeft = setAmount;
+            if (this.fuelLeft <= 0)
+            {
+                UnityEngine.Object.Destroy(this.fuelBarCanvas);
+            }
+        }
+
         public void setParentCharacter(Character parentCharacter)
         {
             if (this.parentCharacter == null)
