@@ -27,6 +27,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 
 # Features
 ## Beehive Points
+Gives the player who finished with bees chasing them points
 #### showcase
 ![Bee Points Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/beePoints.gif)
 #### config
@@ -37,6 +38,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 | Beehive Points Always Award | Whether beehive points should always be awarded                                    | true          |
 
 ## Collapsing Block Repair
+Repairs the magnet platform a few seconds after it has collapsed
 #### showcase
 ![Repairing Platform Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/repairingPlatform.gif)
 #### config
@@ -46,6 +48,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 | Repair Delay | Determines how many seconds before it gets repaired                   | 7             |
 
 ## Hockey Indicator
+Adds an icon on the top left that shows when hockey shooters are going to shoot
 #### showcase
 ![Hockey Indicator](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/HockeyIndicator.gif)
 #### config
@@ -55,6 +58,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 
 
 ## Jetpack Fuel
+Gives jetpacks a limited amount of fuel that they can use before the players lose them
 #### showcase
 ![Jetpack Fuel Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/JetpackFuel.gif)
 #### config
@@ -64,6 +68,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 | Fuel Amount | Determines how many seconds a player can use their jetpack for          | 1             |
 
 ## Stopwatch Custom Values
+Allows for the user to customize the stopwatch a little more
 #### showcase
 ![Custom Stopwatch Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/customStopwatch.gif)
 #### config
