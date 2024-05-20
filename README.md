@@ -21,7 +21,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 - [Credits](#credits)
 
 # Setup Guide
-1. Ensure [bepinex](https://docs.bepinex.dev/articles/user_guide/installation/index.html) is downloaded first
+1. Ensure [bepinex](https://docs.bepinex.dev/articles/user_guide/installation/index.html) and [LTKLib](https://github.com/lotok14/LTKLib) are downloaded first
 2. Head over to the [latest release](https://github.com/lotok14/LTKConfiguration/releases/latest) and download `LTKConfiguration.zip`
 3. Unpack the zip file. You should have something like this:
  - LTKConfiguration
@@ -37,10 +37,12 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 #### showcase
 ![Bee Points Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/beePoints.gif)
 #### config
-| name                   | description                                                                        | default value |
-|------------------------|------------------------------------------------------------------------------------|---------------|
-| Beehive Points Enabled | When set to true, gives you points whenever you finish while being chased by bees  | false         |
-| Beehive Points Amount  | Determines how many points you get for finishing with a hive (value * coin points) | 0.6           |
+| name                        | description                                                                        | default value |
+|-----------------------------|------------------------------------------------------------------------------------|---------------|
+| Beehive Points Enabled      | When set to true, gives you points whenever you finish while being chased by bees  | false         |
+| Beehive Points Amount       | Determines how many points you get for finishing with a hive (value * coin points) | 0.6           |
+| Beehive Points Always Award | Whether beehive points should always be awarded                                    | true          |
+
 ## Collapsing Block Repair
 #### showcase
 ![Repairing Platform Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/repairingPlatform.gif)
@@ -49,6 +51,16 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 |--------------|-----------------------------------------------------------------------|---------------|
 | Repair       | When set to true, repairs the magnet block after a set amount of time | false         |
 | Repair Delay | Determines how many seconds before it gets repaired                   | 7             |
+
+## Hockey Indicator
+#### showcase
+![Hockey Indicator](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/HockeyIndicator.gif)
+#### config
+| name                  | description                                                  | default value |
+|-----------------------|--------------------------------------------------------------|---------------|
+| Show Hockey Indicator | When set to true, shows an icon when hockey is about to fire | false         |
+
+
 ## Jetpack Fuel
 #### showcase
 ![Jetpack Fuel Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/JetpackFuel.gif)
@@ -57,6 +69,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 |-------------|-------------------------------------------------------------------------|---------------|
 | Use fuel    | When set to true, players lose their jetpacks when they run out of fuel | false         |
 | Fuel Amount | Determines how many seconds a player can use their jetpack for          | 1             |
+
 ## Stopwatch Custom Values
 #### showcase
 ![Custom Stopwatch Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/customStopwatch.gif)
