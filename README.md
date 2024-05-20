@@ -1,7 +1,7 @@
 # LTK Configuration
 This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise how some parts of the game work.
 > [!WARNING]
-> This has only been tested in local play, It probably doesn't work online.
+> This has only been tested in local play, It might not work online.
 
 # Table Of Contents
 - [Setup Guide](#setup-guide)
@@ -12,12 +12,15 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
   * [Collapsing Block Repair](#collapsing-block-repair)
       - [showcase](#showcase-1)
       - [config](#config-1)
-  * [Jetpack Fuel](#jetpack-fuel)
+  * [Hockey Indicator](#hockey-indicator)
       - [showcase](#showcase-2)
       - [config](#config-2)
-  * [Stopwatch Custom Values](#stopwatch-custom-values)
+  * [Jetpack Fuel](#jetpack-fuel)
       - [showcase](#showcase-3)
       - [config](#config-3)
+  * [Stopwatch Custom Values](#stopwatch-custom-values)
+      - [showcase](#showcase-4)
+      - [config](#config-4)
 - [Credits](#credits)
 
 # Setup Guide
