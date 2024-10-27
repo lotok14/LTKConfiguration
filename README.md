@@ -15,7 +15,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 - [Credits](#credits)
 
 # Setup Guide
-1. Ensure [bepinex](https://docs.bepinex.dev/articles/user_guide/installation/index.html) and [LTKLib](https://github.com/lotok14/LTKLib) are downloaded first
+1. Ensure [bepinex](https://docs.bepinex.dev/articles/user_guide/installation/index.html) is downloaded first
 2. Head over to the [latest release](https://github.com/lotok14/LTKConfiguration/releases/latest) and download `LTKConfiguration.zip`
 3. Unpack the zip file. You should have something like this:
  - LTKConfiguration
