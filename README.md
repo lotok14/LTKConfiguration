@@ -11,6 +11,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
   * [Hockey Indicator](#hockey-indicator)
   * [Jetpack Fuel](#jetpack-fuel)
   * [Stopwatch Custom Values](#stopwatch-custom-values)
+- [How to make your own point block](#how-to-make-your-own-pointblock)
 - [Credits](#credits)
 
 # Setup Guide
@@ -77,6 +78,9 @@ Allows for the user to customize the stopwatch a little more
 | Stopwatch speed    | the number that time gets multiplied by when a stopwatch is picked up | 0.5           |
 | Stopwatch duration | how many seconds the stopwatch lasts for                              | 6             |
 | Always respawn     | When set to true, the stopwatch will respawn after the round          | false         |
+
+# How to make your own pointBlock
+It's described on the [wiki](https://github.com/lotok14/LTKConfiguration/wiki/Creating-a-custom-pointBlock)
 
 # Credits
 - [Clever Endeavour Games](https://www.cleverendeavourgames.com/)
