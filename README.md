@@ -1,7 +1,7 @@
 # LTK Configuration
 This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise how some parts of the game work.
 > [!WARNING]
-> This has only been tested in local play, It might not work online.
+> This has only been tested in local play, It probably does not work online.
 
 # Table Of Contents
 - [Setup Guide](#setup-guide)
