@@ -1,3 +1,5 @@
+using LTKConfiguration.Utils;
+
 namespace LTKConfiguration.Patches
 {
     public class BeehivePatch
@@ -9,7 +11,7 @@ namespace LTKConfiguration.Patches
             {
                 if (__instance.followedCharacter.Success)
                 {
-                    LTKLib.LTKLibMod.GiveCustomPoint(LTKConfigurationMod.beesCustomPointId, __instance.followedCharacter.networkNumber);
+                    CustomPointController.GiveCustomPoint(LTKConfigurationMod.beesCustomPointId, __instance.followedCharacter.networkNumber);
                 }
             }
         }

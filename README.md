@@ -11,6 +11,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
   * [Hockey Indicator](#hockey-indicator)
   * [Jetpack Fuel](#jetpack-fuel)
   * [Stopwatch Custom Values](#stopwatch-custom-values)
+  * [Double Teleporter](#double-teleporter)
 - [Other](#other)
   * [Changing the assets](#changing-the-assets)
   * [Adding custom points](#adding-custom-points)
@@ -80,6 +81,15 @@ Allows for the user to customize the stopwatch a little more
 | Stopwatch speed    | the number that time gets multiplied by when a stopwatch is picked up | 0.5           |
 | Stopwatch duration | how many seconds the stopwatch lasts for                              | 6             |
 | Always respawn     | When set to true, the stopwatch will respawn after the round          | false         |
+
+# Double Teleporter
+Allows the user to make the portals always spawn in pairs
+### showcase
+![Teleporter png](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/Teleporter.png)
+#### config
+| name               | description                                 | default value |
+|--------------------|---------------------------------------------|---------------|
+| Double Teleporters | Makes the teleporters always spawn in pairs | false         |
 
 # Other
  ## Changing the assets

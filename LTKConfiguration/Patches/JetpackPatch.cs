@@ -6,7 +6,6 @@ using LTKConfiguration.Utils;
 using LTKConfiguration.Extensions;
 using System.Reflection.Emit;
 using System.Linq;
-using LTKLib;
 
 namespace LTKConfiguration.Patches
 {

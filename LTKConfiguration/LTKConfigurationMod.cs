@@ -8,11 +8,11 @@ using LTKConfiguration.Patches;
 using System.Reflection;
 using BepInEx.Logging;
 using UnityEngine;
+using LTKConfiguration.Utils;
 
 namespace LTKConfiguration
 {
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-    [BepInDependency("LTKLib")]
     public class LTKConfigurationMod : BaseUnityPlugin
     {
         internal static ManualLogSource Log;
@@ -28,6 +28,9 @@ namespace LTKConfiguration
         public static ConfigEntry<float> BeehivePointsAmount;
         public static ConfigEntry<bool> BeehivePointsAlwaysAward;
         public static ConfigEntry<bool> ShowPuckBar;
+        public static ConfigEntry<Vector2> PuckBarPosition;
+        public static ConfigEntry<float> PuckBarSize;
+        public static ConfigEntry<bool> DoubleTeleporters;
 
         public static int beesCustomPointId;
 
@@ -47,6 +50,9 @@ namespace LTKConfiguration
             BeehivePointsAmount = Config.Bind("Beehive", "Beehive Points Amount", 0.4f, "How many points finishing with a beehive grants (only works with Beehive Points Enabled = true)");
             BeehivePointsAlwaysAward = Config.Bind("Beehive", "Beehive Points Always Award", true, "Whether you always get points for finishing with a beehive (only works with Beehive Points Enabled = true)");
             ShowPuckBar = Config.Bind("Hockey", "Show Hockey Indicator", false, "Adds an icon showing when a hockey shooter is about to shoot (true/false)");
+            PuckBarSize = Config.Bind("Hockey", "Hockey Indicator Size", 1f, "The value the hockey indicator size gets multiplied by (it's about 215x215 pixels by default)");
+            PuckBarPosition = Config.Bind("Hockey", "Hockey Indicator Position", new Vector2(120, 960), "The middle of the hockey indicator from the bottom left corner in pixels");
+            DoubleTeleporters = Config.Bind("Teleport", "Double Teleporters", false, "Whether there should always be an even amount of teleporters to choose from");
 
             // Plugin startup logic
             Log.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
@@ -92,7 +98,7 @@ namespace LTKConfiguration
                 }
                 else
                 {
-                    Log.LogWarning("(StopwatchPatch) Stopwatch.get_AlwaysRespawn() prefix not patched because it was disabled in the config");
+                    Log.LogWarning("(StopwatchPatch) not patched because it was disabled in the config");
                 }
                 // =====================================</Stopwatch Patch>=====================================
                 
@@ -107,7 +113,7 @@ namespace LTKConfiguration
                 }
                 else
                 {
-                    Log.LogWarning("(CollapsingBlockPatch) CollapsingBlock.FixedUpdate() postfix not patched because it was disabled in the config");
+                    Log.LogWarning("(CollapsingBlockPatch) not patched because it was disabled in the config");
                 }
                 // =====================================</Collapsing Block Patch>=====================================
 
@@ -148,27 +154,38 @@ namespace LTKConfiguration
                 }
                 else
                 {
-                    Log.LogWarning("(JetpackPatch) Jetpack.Pickup() postfix not patched because it was disabled in the config");
-                    Log.LogWarning("(JetpackPatch) Character.FullUpdate() postfix not patched because it was disabled in the config");
-                    Log.LogWarning("(JetpackPatch) Character.RpcGrantJetpack() prefix postfix not patched because it was disabled in the config");
-                    Log.LogWarning("(JetpackPatch) Character.TryPickUpJetpack() transpiler not patched because it was disabled in the config");
-                    Log.LogWarning("(JetpackPatch) Jetpack.OnTriggerEnter2D() transpiler not patched because it was disabled in the config");
+                    Log.LogWarning("(JetpackPatch) not patched because it was disabled in the config");
                 }
                 // =====================================</Jetpack Patch>=====================================
 
                 // =====================================<Beehive Patch>=====================================
                 if (LTKConfigurationMod.BeehivePointsEnabled.Value)
                 {
-                    LTKConfigurationMod.beesCustomPointId = LTKLib.LTKLibMod.CreateCustomPoint("Bees", LTKConfigurationMod.BeehivePointsAmount.Value, new Color(1, 1, 0), LTKConfigurationMod.BeehivePointsAlwaysAward.Value);
+                    LTKConfigurationMod.beesCustomPointId = CustomPointController.CreateCustomPoint("Bees", LTKConfigurationMod.BeehivePointsAmount.Value, new Color(1, 1, 0), LTKConfigurationMod.BeehivePointsAlwaysAward.Value);            
                     // (BeehivePatch) Beehive.FixedUpdate() Prefix
                     // Adds a point when beeswarm target finishes
                     original = AccessTools.Method(typeof(Beehive), "FixedUpdate");
                     patch = AccessTools.Method(typeof(BeehivePatch), "BeehiveFixedUpdatePrefix");
                     patchMethod(harmony, original, patch, "prefix");
+
+                    // =====================================<CustomPointPatch>=====================================
+                    // (CustomPointPatch) GraphScoreBoard.GetPreinstantiatedPointBlock() postfix
+                    // change the pointblock when it has custom id
+                    original = AccessTools.Method(typeof(GraphScoreBoard), "GetPreinstantiatedPointBlock");
+                    patch = AccessTools.Method(typeof(CustomPointPatch), "GraphScoreBoardGetPreinstantiatedPointBlockPostfix");
+                    patchMethod(harmony, original, patch, "postfix");
+
+                    // (CustomPointPatch) PointBlock.get_AlwaysAward Prefix
+                    // return always award from data when it has custom id
+                    original = AccessTools.Method(typeof(PointBlock), "get_AlwaysAward");
+                    patch = AccessTools.Method(typeof(CustomPointPatch), "PointBlockget_AlwaysAwardPrefix");
+                    patchMethod(harmony, original, patch, "prefix");
+                    // =======================================</CustomPointPatch>==================================
                 }
                 else
                 {
-                    Log.LogWarning("(BeehivePatch) Beehive.FixedUpdate() Prefix not patched because it was disabled in the config");
+                    Log.LogWarning("(BeehivePatch) not patched because it was disabled in the config");
+                    Log.LogWarning("(CustomPointPatch) not patched because it was disabled in the config");
                 }
                 // =====================================</Beehive Patch>=====================================
 
@@ -183,9 +200,24 @@ namespace LTKConfiguration
                 }
                 else
                 {
-                    Log.LogWarning("(HockeyPatch) HockeyShooter.Update() Postfix not patched because it was disabled in the config");
+                    Log.LogWarning("(HockeyPatch) not patched because it was disabled in the config");
                 }
                 // =====================================</Hockey Patch>=======================================
+
+                // =======================================<TeleportPatch>======================================
+                if (LTKConfigurationMod.DoubleTeleporters.Value)
+                {
+                    // (TeleportPatch) PartyBox.ChoosePieces() Transpiler
+                    // always spawn teleports in pairs
+                    original = AccessTools.Method(typeof(PartyBox), "ChoosePieces");
+                    patch = AccessTools.Method(typeof(TeleportPatch), "PartyBoxChoosePiecesTranspiler");
+                    patchMethod(harmony, original, patch, "transpiler");
+                }
+                else
+                {
+                    Log.LogWarning("(TeleportPatch) not patched because it was disabled in the config");
+                }
+                // =======================================</TeleportPatch>======================================
             }
             catch (Exception e)
             {

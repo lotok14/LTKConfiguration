@@ -5,10 +5,10 @@
 	<UCHfolder>C:\Users\wskot\Desktop\developerskie\uch mod\ultimate chicken horse\</UCHfolder>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyName>LTKConfiguration</AssemblyName>
     <Description>A mod which lets players configure how some items work with a config</Description>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -48,9 +48,6 @@
     </Reference>
 	<Reference Include="UnityEngine.UI">
 		<HintPath>$(UCHfolder)\UltimateChickenHorse_Data\Managed\UnityEngine.UI.dll</HintPath>
-	</Reference>
-	<Reference Include="LTKLib">
-		<HintPath>C:\Users\wskot\Desktop\developerskie\uch mod\LTKLib\bin\Debug\netstandard2.0\LTKLib.dll</HintPath>
 	</Reference>
   </ItemGroup>
 </Project>

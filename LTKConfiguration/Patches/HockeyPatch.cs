@@ -55,6 +55,11 @@ namespace LTKConfiguration.Patches
                 if (!puckBarInstance)
                 {
                     puckBarInstance = Object.Instantiate(puckBarPrefab);
+                    // Set the puckbar size and position
+                    Vector3 newPuckBarPosition = new Vector3(LTKConfigurationMod.PuckBarPosition.Value.x, LTKConfigurationMod.PuckBarPosition.Value.y, 0);
+                    puckBarInstance.transform.GetChild(0).position = newPuckBarPosition;
+                    puckBarInstance.transform.GetChild(0).GetChild(0).localScale *= LTKConfigurationMod.PuckBarSize.Value; //puckBarFill
+                    puckBarInstance.transform.GetChild(0).GetChild(1).localScale *= LTKConfigurationMod.PuckBarSize.Value; //puckBarBox
                 }
                 puckBarInstance.transform.GetChild(0).GetChild(0).GetComponent<Image>().fillAmount = fillAmount;
             }
