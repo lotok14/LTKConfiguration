@@ -20,6 +20,8 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 # Setup Guide
 1. Ensure [bepinex](https://docs.bepinex.dev/articles/user_guide/installation/index.html) is downloaded first
 2. Head over to the [latest release](https://github.com/lotok14/LTKConfiguration/releases/latest) and download `LTKConfiguration.zip`
+> [!TIP]
+> You can also download `LTKConfiguration.cfg` to use the recommended config. The automatically generated one is fully vanilla by default.
 3. Unpack the zip file. You should have something like this:
  - LTKConfiguration
      - Assets
@@ -28,6 +30,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 4. Drag the LTKConfiguration folder with its contents into `ultimate chicken horse/BepInEx/Plugins`
 5. Run the game once and then close it
 6. Open `ultimate chicken horse/BepInEx/config/LTK.uch.LTKConfiguration.cfg` and edit it to your preferences
+ - if you've downloaded `LTKConfiguration.cfg` in step 2, you can just replace the file
 
 # Features
 ## Beehive Points
