@@ -21,7 +21,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 1. Ensure [bepinex](https://docs.bepinex.dev/articles/user_guide/installation/index.html) is downloaded first
 2. Head over to the [latest release](https://github.com/lotok14/LTKConfiguration/releases/latest) and download `LTKConfiguration.zip`
 > [!TIP]
-> You can also download `LTKConfiguration.cfg` to use the recommended config. The automatically generated one is fully vanilla by default.
+> You can also download `LTKConfiguration.cfg` to use the recommended config. The automatically generated one doesn't change anything by default.
 3. Unpack the zip file. You should have something like this:
  - LTKConfiguration
      - Assets
