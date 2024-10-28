@@ -38,11 +38,11 @@ Gives the player who finished with bees chasing them points
 #### showcase
 ![Bee Points Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/beePoints.gif)
 #### config
-| name                        | description                                                                        | default value |
-|-----------------------------|------------------------------------------------------------------------------------|---------------|
-| Beehive Points Enabled      | When set to true, gives you points whenever you finish while being chased by bees  | false         |
-| Beehive Points Amount       | Determines how many points you get for finishing with a hive (value * coin points) | 0.6           |
-| Beehive Points Always Award | Whether beehive points should always be awarded                                    | true          |
+| name                        | description                                                                             | default value |
+|-----------------------------|-----------------------------------------------------------------------------------------|---------------|
+| Beehive Points Enabled      | When set to true, gives you points whenever you finish while being chased by bees       | false         |
+| Beehive Points Amount       | Determines how many points you get for finishing with a hive (e.g. a trap point is 0.2) | 0.4           |
+| Beehive Points Always Award | Whether beehive points should always be awarded                                         | true          |
 
 ## Collapsing Block Repair
 Repairs the magnet platform a few seconds after it has collapsed
