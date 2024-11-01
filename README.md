@@ -1,7 +1,7 @@
 # LTK Configuration
 This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise how some parts of the game work.
 > [!WARNING]
-> This has only been tested in local play, It might not work online.
+> This has only been tested in local play, It probably does not work online.
 
 # Table Of Contents
 - [Setup Guide](#setup-guide)
@@ -20,6 +20,8 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 # Setup Guide
 1. Ensure [bepinex](https://docs.bepinex.dev/articles/user_guide/installation/index.html) is downloaded first
 2. Head over to the [latest release](https://github.com/lotok14/LTKConfiguration/releases/latest) and download `LTKConfiguration.zip`
+> [!TIP]
+> You can also download `LTKConfiguration.cfg` to use the recommended config. The automatically generated one doesn't change anything by default.
 3. Unpack the zip file. You should have something like this:
  - LTKConfiguration
      - Assets
@@ -28,6 +30,7 @@ This is an `Ultimate Chicken Horse`  mod that adds a bunch of ways to customise 
 4. Drag the LTKConfiguration folder with its contents into `ultimate chicken horse/BepInEx/Plugins`
 5. Run the game once and then close it
 6. Open `ultimate chicken horse/BepInEx/config/LTK.uch.LTKConfiguration.cfg` and edit it to your preferences
+ - if you've downloaded `LTKConfiguration.cfg` in step 2, you can just replace the file
 
 # Features
 ## Beehive Points
@@ -35,11 +38,11 @@ Gives the player who finished with bees chasing them points
 #### showcase
 ![Bee Points Gif](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/beePoints.gif)
 #### config
-| name                        | description                                                                        | default value |
-|-----------------------------|------------------------------------------------------------------------------------|---------------|
-| Beehive Points Enabled      | When set to true, gives you points whenever you finish while being chased by bees  | false         |
-| Beehive Points Amount       | Determines how many points you get for finishing with a hive (value * coin points) | 0.6           |
-| Beehive Points Always Award | Whether beehive points should always be awarded                                    | true          |
+| name                        | description                                                                             | default value |
+|-----------------------------|-----------------------------------------------------------------------------------------|---------------|
+| Beehive Points Enabled      | When set to true, gives you points whenever you finish while being chased by bees       | false         |
+| Beehive Points Amount       | Determines how many points you get for finishing with a hive (e.g. a trap point is 0.2) | 0.4           |
+| Beehive Points Always Award | Whether beehive points should always be awarded                                         | true          |
 
 ## Collapsing Block Repair
 Repairs the magnet platform a few seconds after it has collapsed
