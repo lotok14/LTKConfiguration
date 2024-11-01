@@ -56,9 +56,11 @@ Adds an icon on the top left that shows when hockey shooters are going to shoot
 #### showcase
 ![Hockey Indicator](https://github.com/lotok14/LTKConfiguration/blob/main/github%20media/HockeyIndicator.gif)
 #### config
-| name                  | description                                                  | default value |
-|-----------------------|--------------------------------------------------------------|---------------|
-| Show Hockey Indicator | When set to true, shows an icon when hockey is about to fire | false         |
+| name                      | description                                                              | default value         |
+|---------------------------|--------------------------------------------------------------------------|-----------------------|
+| Hockey Indicator Type     | shows when hockey shooter is about to fire. 0 - none, 1 - icon, 2 - line | 0                     |
+| Hockey Indicator Size     | size of the icon if Hockey Indicator Type is set to 1                    | 1                     |
+| Hockey Indicator Position | position of the icon if Hockey Indicator Type is set to 1                | {"x":120.0,"y":960.0} |
 
 
 ## Jetpack Fuel

@@ -1,75 +1,50 @@
 using System.Runtime.CompilerServices;
 using BepInEx;
+using GameEvent;
 using HarmonyLib;
 using LTKConfiguration.Extensions;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
+using System;
+using LTKConfiguration.Utils;
+using System.Collections.Generic;
+using System.Reflection.Emit;
+using System.Linq;
 
 namespace LTKConfiguration.Patches
 {
     public class HockeyPatch
     {
-        public static GameObject puckBarPrefab;
-        public static float fillAmount = -1;
-        public static GameObject puckBarInstance;
-        public static bool filling = false;
-
-        // loads the puckBar prefab
-        public static void LoadPuckBarPrefab()
+        // sets the raycast interact layers
+        public static void HockeyShooterStartPostfix(HockeyShooter __instance)
         {
-            AssetBundle puckBarAssetBundle = AssetBundle.LoadFromFile(Paths.PluginPath + "/LTKConfiguration/Assets/PuckBar/puckbar.assetBundle");
-            UnityEngine.Object[] puckBarAssets = puckBarAssetBundle.LoadAllAssets();
-            foreach (UnityEngine.Object asset in puckBarAssets)
-            {
-                if (asset.name == "puckBarCanvas")
-                {
-                    HockeyPatch.puckBarPrefab = asset as GameObject;
-                }
-            }
-        }
-
-        // fills the bar when filling set to true
-        public static void Update()
-        {
-            //LTKConfigurationMod.Log.LogWarning($"FILL AMOUNT JEST {fillAmount}");
-            if (Object.FindObjectsOfType(typeof(HockeyShooter)).Length == 0 & puckBarPrefab is not null)
-            {
-                fillAmount = -1;
-                Object.Destroy(puckBarInstance);
-                filling = false;
-            }
-
-            if (filling)
-            {
-                fillAmount += Time.deltaTime;
-            }
-
-            if (fillAmount >= 1 / Modifiers.GetInstance().RateOfFire)
-            {
-                filling = false;
-                fillAmount = 0;
-            }
-            else if (fillAmount >= 0)
-            {
-                if (!puckBarInstance)
-                {
-                    puckBarInstance = Object.Instantiate(puckBarPrefab);
-                    // Set the puckbar size and position
-                    Vector3 newPuckBarPosition = new Vector3(LTKConfigurationMod.PuckBarPosition.Value.x, LTKConfigurationMod.PuckBarPosition.Value.y, 0);
-                    puckBarInstance.transform.GetChild(0).position = newPuckBarPosition;
-                    puckBarInstance.transform.GetChild(0).GetChild(0).localScale *= LTKConfigurationMod.PuckBarSize.Value; //puckBarFill
-                    puckBarInstance.transform.GetChild(0).GetChild(1).localScale *= LTKConfigurationMod.PuckBarSize.Value; //puckBarBox
-                }
-                puckBarInstance.transform.GetChild(0).GetChild(0).GetComponent<Image>().fillAmount = fillAmount;
-            }
+            PuckBarController.SetPuckInteractLayers(__instance.puckInteractsLayers);
         }
 
         // starts the filling process
         public static void HockeyShooterWarningSoundPostfix()
         {
-            HockeyPatch.filling = true;
-            HockeyPatch.fillAmount = 0;
+            PuckBarController.StartFilling();
+        }
+
+        // makes the hockey shooter shoot slower when rateOfFire is less than 0
+        public static IEnumerable<CodeInstruction> HockeyShooterActivateTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            (int startIndex, int endIndex) = TranspilerHelper.FindSegmentByOperand(instructions, new OpCode[] { OpCodes.Ldloc_0, OpCodes.Ble_Un }, "1");
+            var codes = new List<CodeInstruction>(instructions);
+
+            if (startIndex > -1 && endIndex > -1)
+            {
+                // remove && rateOfFire > 1f
+                codes.RemoveRange(startIndex, endIndex - startIndex + 1);
+            }
+            else
+            {
+                LTKConfigurationMod.Log.LogWarning("HockeyShooterActivateTranspiler() didn't find the string");
+            }
+
+            return codes.AsEnumerable();
         }
     }
 }

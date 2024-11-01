@@ -27,7 +27,7 @@ namespace LTKConfiguration
         public static ConfigEntry<bool> BeehivePointsEnabled;
         public static ConfigEntry<float> BeehivePointsAmount;
         public static ConfigEntry<bool> BeehivePointsAlwaysAward;
-        public static ConfigEntry<bool> ShowPuckBar;
+        public static ConfigEntry<int> PuckBarType;
         public static ConfigEntry<Vector2> PuckBarPosition;
         public static ConfigEntry<float> PuckBarSize;
         public static ConfigEntry<bool> DoubleTeleporters;
@@ -49,17 +49,28 @@ namespace LTKConfiguration
             BeehivePointsEnabled = Config.Bind("Beehive", "Beehive Points Enabled", false, "Whether finishing with a beehive grants points (true/false)");
             BeehivePointsAmount = Config.Bind("Beehive", "Beehive Points Amount", 0.4f, "How many points finishing with a beehive grants (only works with Beehive Points Enabled = true)");
             BeehivePointsAlwaysAward = Config.Bind("Beehive", "Beehive Points Always Award", true, "Whether you always get points for finishing with a beehive (only works with Beehive Points Enabled = true)");
-            ShowPuckBar = Config.Bind("Hockey", "Show Hockey Indicator", false, "Adds an icon showing when a hockey shooter is about to shoot (true/false)");
-            PuckBarSize = Config.Bind("Hockey", "Hockey Indicator Size", 1f, "The value the hockey indicator size gets multiplied by (it's about 215x215 pixels by default)");
-            PuckBarPosition = Config.Bind("Hockey", "Hockey Indicator Position", new Vector2(120, 960), "The middle of the hockey indicator from the bottom left corner in pixels");
+            PuckBarType = Config.Bind("Hockey", "Hockey Indicator Type", 0, new ConfigDescription("What puckbar is shown. 0 - none, 1 - icon, 2 - trajectory line", new AcceptableValueRange<int>(0, 2)));
+            PuckBarSize = Config.Bind("Hockey", "Hockey Indicator Size", 1f, "The value the hockey indicator icon size gets multiplied by (it's about 215x215 pixels by default) (only works with Hockey Indicator Type = 1)");
+            PuckBarPosition = Config.Bind("Hockey", "Hockey Indicator Position", new Vector2(120, 960), "The middle of the hockey indicator icon from the bottom left corner in pixels (only works with Hockey Indicator Type = 1)");
             DoubleTeleporters = Config.Bind("Teleport", "Double Teleporters", false, "Whether there should always be an even amount of teleporters to choose from");
 
             // Plugin startup logic
             Log.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
             // load assets
-            JetpackPatch.LoadFuelBarPrefab();
-            HockeyPatch.LoadPuckBarPrefab();
+            if (JetpackUseFuel.Value)
+            {
+                JetpackPatch.LoadFuelBarPrefab();
+            }
+            if (PuckBarType.Value == 1)
+            {
+                PuckBarController.LoadPuckBarPrefab();
+            } 
+            else if(PuckBarType.Value == 2)
+            {
+                LineDrawer.LoadLineDrawer();
+            }
+            PuckBarController.SetPuckBarType(PuckBarType.Value);
 
             // patch with harmony
             startPatching();
@@ -190,13 +201,28 @@ namespace LTKConfiguration
                 // =====================================</Beehive Patch>=====================================
 
                 // =====================================<Hockey Patch>=======================================
-                if (LTKConfigurationMod.ShowPuckBar.Value)
+                if (LTKConfigurationMod.PuckBarType.Value != 0)
                 {
-                    // (HockeyPatch) HockeyShooter.Update() Postfix
+                    // (HockeyPatch) HockeyShooter.Activate() Transpiler
+                    // makes the hockey shooter shoot slower if modifier for that is lower than 1
+                    original = AccessTools.Method(typeof(HockeyShooter), "Activate");
+                    patch = AccessTools.Method(typeof(HockeyPatch), "HockeyShooterActivateTranspiler");
+                    patchMethod(harmony, original, patch, "transpiler");
+
+                    // (HockeyPatch) HockeyShooter.warningSound() Postfix
                     // sets the fill of the puckbar to the time until next shot
                     original = AccessTools.Method(typeof(HockeyShooter), "warningSound");
                     patch = AccessTools.Method(typeof(HockeyPatch), "HockeyShooterWarningSoundPostfix");
                     patchMethod(harmony, original, patch, "postfix");
+
+                    if(LTKConfigurationMod.PuckBarType.Value == 2)
+                    {
+                        // (HockeyPatch) HockeyShooter.Start() Postfix
+                        // sets the layerMask of the puckbar raycast
+                        original = AccessTools.Method(typeof(HockeyShooter), "Start");
+                        patch = AccessTools.Method(typeof(HockeyPatch), "HockeyShooterStartPostfix");
+                        patchMethod(harmony, original, patch, "postfix");
+                    }
                 }
                 else
                 {
@@ -227,7 +253,7 @@ namespace LTKConfiguration
 
         void Update()
         {
-            HockeyPatch.Update();
+            PuckBarController.Update();
         }
 
         // patch a method with a specified patch
